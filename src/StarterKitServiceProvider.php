@@ -82,56 +82,74 @@ class StarterKitServiceProvider extends PackageServiceProvider
         $command->info('Setting up your Laravel app...');
 
         // Add project config
-        $this->publishStubs([
-            __DIR__.'/../stubs/config/project.stub' => $this->app->configPath('project.php'),
-        ]);
-        $this->commitChanges('Add Project config');
+        if (! $this->check('config')) {
+            $this->publishStubs([
+                __DIR__.'/../stubs/config/project.stub' => $this->app->configPath('project.php'),
+            ]);
+            $this->commitChanges('Add Project config');
+        }
 
         // Install Larastan
-        $command->comment('Installing Larastan...');
-        $result = Process::quietly()->run('composer require --dev "larastan/larastan:^2.0"');
-        if ($result->successful()) {
-            $this->publishStubs([
-                __DIR__.'/../stubs/phpstan.stub' => $this->app->basePath('phpstan.neon'),
-            ]);
+        if (! $this->check('larastan')) {
+            $command->comment('Installing Larastan...');
+            $result = Process::quietly()->run('composer require --dev "larastan/larastan:^2.0"');
+            if ($result->successful()) {
+                $this->publishStubs([
+                    __DIR__.'/../stubs/phpstan.stub' => $this->app->basePath('phpstan.neon'),
+                ]);
 
-            $this->commitChanges('Add Larastan');
+                $this->commitChanges('Add Larastan');
+            }
+        } else {
+            $command->comment('Larastan already installed.');
         }
 
         // Install pest
-        $command->comment('Installing Pest...');
-        $result = Process::pipe([
-            'composer remove phpunit/phpunit',
-            'composer require pestphp/pest --dev --with-all-dependencies',
-            './vendor/bin/pest --init',
-        ]);
-        if ($result->successful()) {
-            $this->publishStubs([
-                __DIR__.'/../stubs/tests/pest.stub' => $this->app->basePath('tests/Pest.php'),
-                __DIR__.'/../stubs/tests/architecture-test.stub' => $this->app->basePath('tests/ArchitectureTest.php'),
-                __DIR__.'/../stubs/tests/Unit/example-test.stub' => $this->app->basePath('tests/Unit/ExampleTest.php'),
-                __DIR__.'/../stubs/tests/Feature/example-test.stub' => $this->app->basePath('tests/Feature/ExampleTest.php'),
+        if (! $this->check('pest')) {
+            $command->comment('Installing Pest...');
+            $result = Process::pipe([
+                'composer remove phpunit/phpunit',
+                'composer require pestphp/pest --dev --with-all-dependencies',
+                './vendor/bin/pest --init',
             ]);
+            if ($result->successful()) {
+                $this->publishStubs([
+                    __DIR__.'/../stubs/tests/pest.stub' => $this->app->basePath('tests/Pest.php'),
+                    __DIR__.'/../stubs/tests/architecture-test.stub' => $this->app->basePath('tests/ArchitectureTest.php'),
+                    __DIR__.'/../stubs/tests/Unit/example-test.stub' => $this->app->basePath('tests/Unit/ExampleTest.php'),
+                    __DIR__.'/../stubs/tests/Feature/example-test.stub' => $this->app->basePath('tests/Feature/ExampleTest.php'),
+                ]);
 
-            $this->commitChanges('Add Pest');
+                $this->commitChanges('Add Pest');
+            }
+        } else {
+            $command->comment('Pest already installed.');
         }
 
         // Install duster
-        $command->comment('Installing Duster...');
-        $result = Process::quietly()->run('composer require tightenco/duster --dev');
-        if ($result->successful()) {
-            $this->publishStubs([
-                __DIR__.'/../stubs/pint.stub' => $this->app->basePath('pint.json'),
-                __DIR__.'/../stubs/tlint.stub' => $this->app->basePath('tlint.json'),
-                __DIR__.'/../stubs/duster.stub' => $this->app->basePath('duster.json'),
-            ]);
+        if (! $this->check('duster')) {
+            $command->comment('Installing Duster...');
+            $result = Process::quietly()->run('composer require tightenco/duster --dev');
+            if ($result->successful()) {
+                $this->publishStubs([
+                    __DIR__.'/../stubs/pint.stub' => $this->app->basePath('pint.json'),
+                    __DIR__.'/../stubs/tlint.stub' => $this->app->basePath('tlint.json'),
+                    __DIR__.'/../stubs/duster.stub' => $this->app->basePath('duster.json'),
+                ]);
 
-            $this->commitChanges('Add Duster');
+                $this->commitChanges('Add Duster');
+            }
+        } else {
+            $command->comment('Duster already installed.');
         }
     }
 
     protected function installTailwindCSS(InstallCommand $command): void
     {
+        if ($this->check('tailwind') && ! confirm('TailwindCSS already installed. Would you like to reinstall?')) {
+            return;
+        }
+
         $command->comment('Installing TailwindCSS...');
 
         $result = Process::pipe(function (Pipe $pipe) {
@@ -148,6 +166,10 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
     protected function installFilament(InstallCommand $command): void
     {
+        if ($this->check('filament') && ! confirm('Filament already installed. Would you like to reinstall?')) {
+            return;
+        }
+
         $command->comment('Installing Filament...');
 
         $result = Process::pipe(function (Pipe $pipe) {
@@ -164,6 +186,10 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
     protected function installPrettier(InstallCommand $command): void
     {
+        if ($this->check('prettier') && ! confirm('Prettier already installed. Would you like to reinstall?')) {
+            return;
+        }
+
         $command->comment('Installing Prettier...');
 
         $result = Process::pipe(function (Pipe $pipe) {
@@ -185,6 +211,10 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
     protected function installGithubActions(string $workflow, InstallCommand $command): void
     {
+        if ($this->check('github_actions') && ! confirm('GitHub Actions already installed. Would you like to reinstall?')) {
+            return;
+        }
+
         if ($workflow === 'none') {
             return;
         }
@@ -200,6 +230,10 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
     protected function installDBUpdates(InstallCommand $command): void
     {
+        if ($this->check('db_updates')) {
+            return;
+        }
+
         $command->comment('Installing DB updates...');
 
         $filename = date('Y_m_d_his').'_create_database_updates_table.php';
@@ -213,5 +247,21 @@ class StarterKitServiceProvider extends PackageServiceProvider
         if ($result->successful()) {
             $this->commitChanges('Add DB updates');
         }
+    }
+
+    protected function check(string $feature): bool
+    {
+        return match ($feature) {
+            'config' => File::exists($this->app->configPath('project.php')),
+            'larastan' => File::exists($this->app->basePath('vendor/larastan/larastan')),
+            'pest' => File::exists($this->app->basePath('vendor/pestphp/pest')),
+            'tailwind' => File::exists($this->app->basePath('tailwind.config.js')),
+            'filament' => File::exists($this->app->basePath('vendor/filament/filament')),
+            'db_updates' => collect(File::allFiles($this->app->databasePath('migrations')))->map->getFilename()->filter(fn ($file) => str_contains($file, 'create_database_updates_table'))->isNotEmpty(),
+            'prettier' => File::exists($this->app->basePath('.prettierrc')),
+            'duster' => File::exists($this->app->basePath('vendor/tightenco/duster')),
+            'github_actions' => File::exists($this->app->basePath('.github/workflows/ci.yml')),
+            default => false,
+        };
     }
 }
