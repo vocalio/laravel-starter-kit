@@ -192,7 +192,7 @@ class StarterKitServiceProvider extends PackageServiceProvider
         $command->comment('Installing GitHub Actions...');
 
         $this->publishStubs([
-            __DIR__.'/../stubs/.github/workflows/'.$workflow.'.yml' => $this->app->basePath('.github/workflows/'.$workflow.'.yml'),
+            __DIR__.'/../stubs/workflows/'.$workflow.'.stub' => $this->app->basePath('.github/workflows/ci.yml'),
         ]);
 
         $this->commitChanges('Add GitHub Actions');
