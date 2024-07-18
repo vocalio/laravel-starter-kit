@@ -1,10 +1,10 @@
 {
     "name": "vocalio/laravel-starter-kit",
-    "description": ":package_description",
+    "description": "Laravel Starter Kits with all the necessary tools and configurations to kickstart your next project.",
     "keywords": [
-        ":vendor_name",
+        "vocalio",
         "laravel",
-        ":package_slug"
+        "laravel-starter-kit"
     ],
     "homepage": "https://github.com/vocalio/laravel-starter-kit",
     "license": "MIT",
