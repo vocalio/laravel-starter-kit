@@ -1,0 +1,12 @@
+<?php
+
+return new class
+{
+    /**
+     * Run the updates.
+     */
+    public function __invoke(): void
+    {
+        //
+    }
+};

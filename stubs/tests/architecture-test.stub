@@ -1,0 +1,9 @@
+<?php
+
+test('globals')
+    ->expect(['dd', 'ddd', 'var_dump', 'die', 'dump', 'ray', 'sleep', 'env'])
+    ->not->toBeUsed();
+
+test('controllers')
+    ->expect('App\Http\Controllers')
+    ->not->toUse('Illuminate\Http\Request');

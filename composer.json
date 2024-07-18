@@ -1,18 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
+    "name": "vocalio/laravel-starter-kit",
     "description": ":package_description",
     "keywords": [
         ":vendor_name",
         "laravel",
         ":package_slug"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/vocalio/laravel-starter-kit",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
-            "role": "Developer"
+            "name": "Vocalio",
+            "email": "hello@vocalio.sk"
         }
     ],
     "require": {
@@ -35,13 +34,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Vocalio\\LaravelStarterKit\\": "src/",
+            "Vocalio\\LaravelStarterKit\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Vocalio\\LaravelStarterKit\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -73,10 +72,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Vocalio\\LaravelStarterKit\\StarterKitServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelStarterKit": "Vocalio\\LaravelStarterKit\\Facades\\StarterKit"
             }
         }
     },
