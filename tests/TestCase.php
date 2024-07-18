@@ -22,7 +22,7 @@ class TestCase extends Orchestra
             'database' => ':memory:',
         ]);
 
-        $migration = include __DIR__.'/../database/migrations/create_database_updates_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_database_updates_table.stub';
         $migration->up();
     }
 }

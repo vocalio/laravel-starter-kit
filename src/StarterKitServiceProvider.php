@@ -202,13 +202,13 @@ class StarterKitServiceProvider extends PackageServiceProvider
     {
         $command->comment('Installing DB updates...');
 
-        $result = Process::pipe(function (Pipe $pipe) {
-            $pipe->command('composer require --dev beyondcode/laravel-dump-server');
-            $pipe->command('php artisan vendor:publish --provider="BeyondCode\DumpServer\DumpServerServiceProvider"');
-            $pipe->command('php artisan migrate');
-        }, function (string $type, string $output) {
-            echo $output;
-        });
+        $filename = date('Y_m_d_his').'_create_database_updates_table.php';
+
+        $this->publishStubs([
+            __DIR__.'/../database/migrations/create_database_updates_table.stub' => $this->app->databasePath('migrations/'.$filename),
+        ]);
+
+        $result = Process::run('php artisan migrate --path='.$filename);
 
         if ($result->successful()) {
             $this->commitChanges('Add DB updates');
