@@ -1,69 +1,122 @@
-# :package_description
+# Laravel Starter Kit
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/vocalio/laravel-starter-kit.svg?style=flat-square)](https://packagist.org/packages/vocalio/laravel-starter-kit)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/vocalio/laravel-starter-kit/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/vocalio/laravel-starter-kit/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/vocalio/laravel-starter-kit/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/vocalio/laravel-starter-kit/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/vocalio/laravel-starter-kit.svg?style=flat-square)](https://packagist.org/packages/vocalio/laravel-starter-kit)
 
 ## Installation
 
-You can install the package via composer:
+Get started with Laravel Starter Kit by installing it via Composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require vocalio/laravel-starter-kit
 ```
 
-You can publish and run the migrations with:
+After installation, run the setup command: 
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+php artisan starter-kit:install
 ```
 
 ## Usage
 
-```php
-$variable = new Vocalio\LaravelStarterKit();
-echo $variable->echoPhrase('Hello, VendorName!');
+During the installation process, you'll be guided through selecting the features you'd like to incorporate into your project.
+
+### Available Features
+- Larastan
+- Pest
+- Duster (TLint, PHP_CodeSniffer, PHP CS Fixer, Pint)
+- Tailwind CSS
+- Filament
+- DB updates
+- Prettier
+- Github Actions
+
+## Feature Details
+
+### Larastan
+Enhance your code quality with static analysis. We provide a pre-configured Larastan setup at level 7.
+Customize your configuration in the `phpstan.neon` file.
+
+Run Larastan with:  
+
+```bash
+vendor/bin/phpstan analyse
 ```
+
+### Pest
+We've chosen Pest as our testing framework. Our setup includes pre-configured Architectural tests.
+
+Execute Pest tests using:
+
+```bash
+php artisan test
+```
+
+### Duster
+Maintain clean and consistent code with Duster. It integrates TLint, PHP_CodeSniffer, PHP CS Fixer, and Pint to check and fix your code style.
+
+For more information, refer to the [Duster documentation](https://github.com/tighten/duster)
+
+### Tailwind CSS
+Opt for Tailwind CSS to get a default configuration ready for your project.
+
+### Filament
+Choose Filament to install the package with a default configuration.
+
+### DB updates
+Our DB updates feature simplifies database modifications and fixes. It operates similarly to Laravel migrations.
+
+#### Usage
+
+Generate a new DB update:
+
+```bash
+php artisan db-update:create
+```
+
+This creates a new file in `database/updates`. Here are some examples of what you can do:
+
+Update database values after refactoring:
+```php
+public function __invoke(): void
+{
+    Order::query()
+        ->where('state', 'new')
+        ->update(['state' => OrderState::CREATED]);
+}
+```
+
+Clean up test data from your production database:
+
+```php
+public function __invoke(): void
+{
+    Order::query()
+        ->whereDate('created_at', '<', '2024-01-01')
+        ->delete();
+}
+```
+
+Execute your DB update with:
+
+```bash
+php artisan db-update:run
+```
+
+### Prettier
+Prettier enforces consistent code formatting. We provide a pre-configured setup (`.prettierrc`).
+
+Use the `.prettierignore` file to exclude specific files or directories from Prettier's formatting.
+
+### Github Actions
+Our starter kit includes a pre-configured Github Actions workflow for automated testing and code style checks on every push to the main branch.
+
+#### Permissions
+To enable Github Actions to commit changes from Duster and Prettier, set the appropriate permissions:
+
+Navigate to `github.com -> (Your project) -> Settings -> Actions -> General -> Workflow permissions` and select `Read and write permissions`.
 
 ## Testing
 
@@ -85,7 +138,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [dommer1](https://github.com/dommer1)
 - [All Contributors](../../contributors)
 
 ## License
