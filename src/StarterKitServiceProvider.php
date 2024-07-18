@@ -67,7 +67,7 @@ class StarterKitServiceProvider extends PackageServiceProvider
     protected function publishStubs(array $stubs)
     {
         foreach ($stubs as $source => $destination) {
-            $destinationPath = $this->app->basePath($destination);
+            $destinationPath = $destination;
 
             // Ensure the directory exists
             File::ensureDirectoryExists(dirname($destinationPath));
