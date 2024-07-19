@@ -211,11 +211,11 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
     protected function installGithubActions(string $workflow, InstallCommand $command): void
     {
-        if ($this->check('github_actions') && ! confirm('GitHub Actions already installed. Would you like to reinstall?')) {
+        if ($workflow === 'none') {
             return;
         }
 
-        if ($workflow === 'none') {
+        if ($this->check('github_actions') && ! confirm('GitHub Actions already installed. Would you like to reinstall?')) {
             return;
         }
 
