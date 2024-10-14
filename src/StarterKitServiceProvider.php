@@ -154,7 +154,7 @@ class StarterKitServiceProvider extends PackageServiceProvider
 
         $result = Process::pipe(function (Pipe $pipe) {
             $pipe->command('npm install -D tailwindcss postcss autoprefixer');
-            $pipe->command('npx tailwindcss init');
+            $pipe->command('npx tailwindcss init -p');
         }, function (string $type, string $output) {
             echo $output;
         });
