@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `:package_name` will be documented in this file.
+All notable changes to `vocalio/laravel-starter-kit` will be documented in this file.
 
 ## 1.0.2 - 2024-10-14
 
