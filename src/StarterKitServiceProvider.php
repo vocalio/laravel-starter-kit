@@ -193,7 +193,7 @@ class StarterKitServiceProvider extends PackageServiceProvider
         $command->comment('Installing Prettier...');
 
         $result = Process::pipe(function (Pipe $pipe) {
-            $pipe->command('npm install -D prettier@^3.2.5 prettier-plugin-blade prettier-plugin-tailwindcss@^0.5.11');
+            $pipe->command('npm install -D prettier@^3.4.2 prettier-plugin-blade prettier-plugin-tailwindcss@^0.6.10');
         }, function (string $type, string $output) {
             echo $output;
         });
@@ -255,7 +255,7 @@ class StarterKitServiceProvider extends PackageServiceProvider
             'config' => File::exists($this->app->configPath('project.php')),
             'larastan' => File::exists($this->app->basePath('vendor/larastan/larastan')),
             'pest' => File::exists($this->app->basePath('vendor/pestphp/pest')),
-            'tailwind' => File::exists($this->app->basePath('tailwind.config.js')),
+            'tailwind' => File::exists($this->app->basePath('node_modules/tailwindcss')),
             'filament' => File::exists($this->app->basePath('vendor/filament/filament')),
             'db_updates' => collect(File::allFiles($this->app->databasePath('migrations')))->map->getFilename()->filter(fn ($file) => str_contains($file, 'create_database_updates_table'))->isNotEmpty(),
             'prettier' => File::exists($this->app->basePath('.prettierrc')),
